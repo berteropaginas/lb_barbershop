@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barber Shop Leandro Bertotto</title>
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      padding: 20px 10px;
+      text-align: center;
+      background-color: #1e1e1e;
+      border-bottom: 2px solid #333;
+    }
+
+    header img {
+      max-width: 220px;
+      height: auto;
+      display: block;
+      margin: 0 auto 10px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      color: #ffffff;
+      margin-bottom: 5px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .card {
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #bbb;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #333;
+      background-color: #2a2a2a;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #c5a059;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #c5a059;
+      color: #121212;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #d4af37;
+    }
+
+    .alert {
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 15px;
+      display: none;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .alert-success {
+      background-color: #1b4332;
+      color: #8fce00;
+      border: 1px solid #2d6a4f;
+    }
+
+    .alert-error {
+      background-color: #4a0e17;
+      color: #ff6b6b;
+      border: 1px solid #800f2f;
+    }
+
+    footer {
+      width: 100%;
+      padding: 20px 10px;
+      text-align: center;
+      background-color: #1e1e1e;
+      border-top: 1px solid #333;
+      margin-top: auto;
+    }
+
+    footer img {
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    footer img:hover {
+      opacity: 1;
+    }
+
+    footer a {
+      color: #888;
+      text-decoration: none;
+      font-size: 0.85rem;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    footer a:hover {
+      color: #c5a059;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <!-- Logo principal en Base64 acoplado -->
+    <img src="data:image/webp;base64,UklGRkxFAQBXR..." alt="Barber Shop Leandro Bertotto">
+    <h1>Reserva tu Turno</h1>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <form id="booking-form">
+        <div class="form-group">
+          <label for="nombre">Nombre Completo</label>
+          <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono">Teléfono / WhatsApp</label>
+          <input type="tel" id="telefono" placeholder="Ej: 3401123456" required>
+        </div>
+
+        <div class="form-group">
+          <label for="servicio">Servicio</label>
+          <select id="servicio" required>
+            <option value="" disabled selected>Selecciona un servicio</option>
+            <option value="Corte de Pelo">Corte de Pelo</option>
+            <option value="Arreglo de Barba">Arreglo de Barba</option>
+            <option value="Corte + Barba">Corte + Barba</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fecha">Fecha</label>
+          <input type="date" id="fecha" required>
+        </div>
+
+        <div class="form-group">
+          <label for="hora">Hora</label>
+          <input type="time" id="hora" required>
+        </div>
+
+        <button type="submit" id="btn-submit">Confirmar Reserva</button>
+      </form>
+
+      <div id="alert-msg" class="alert"></div>
+    </div>
+  </div>
+
+  <footer>
+    <!-- Isologotipo del footer en Base64 acoplado -->
+    <img src="data:image/webp;base64,UklGRk4SAABXR..." alt="LB" width="44" style="display:block; margin:0 auto 10px; opacity:.9;">
+    <p style="font-size: 0.8rem; color: #666;">&copy; Barber Shop Leandro Bertotto</p>
+    <a href="#">Acceso peluquero</a>
+  </footer>
+
+  <!-- Firebase JavaScript SDK (Modular v10+) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    // -------------------------------------------------------------------
+    // CONFIGURACIÓN DE FIREBASE (Reemplaza con los datos de tu consola)
+    // -------------------------------------------------------------------
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY_AQUI",
+      authDomain: "tu-proyecto.firebaseapp.com",
+      databaseURL: "https://tu-proyecto-default-rtdb.firebaseio.com",
+      projectId: "tu-proyecto",
+      storageBucket: "tu-proyecto.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef123456"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Elementos del DOM
+    const form = document.getElementById('booking-form');
+    const alertMsg = document.getElementById('alert-msg');
+    const btnSubmit = document.getElementById('btn-submit');
+
+    // Manejo del evento Submit
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      btnSubmit.disabled = true;
+      btnSubmit.innerText = "Guardando...";
+
+      const nombre = document.getElementById('nombre').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
+      const servicio = document.getElementById('servicio').value;
+      const fecha = document.getElementById('fecha').value;
+      const hora = document.getElementById('hora').value;
+
+      try {
+        const turnosRef = ref(db, 'turnos');
+        const nuevoTurnoRef = push(turnosRef);
+
+        await set(nuevoTurnoRef, {
+          nombre: nombre,
+          telefono: telefono,
+          servicio: servicio,
+          fecha: fecha,
+          hora: hora,
+          creadoEn: new Date().toISOString()
+        });
+
+        showAlert("¡Reserva confirmada con éxito!", "success");
+        form.reset();
+
+      } catch (error) {
+        console.error("Error al guardar en Firebase:", error);
+        showAlert("Ocurrió un error al guardar el turno. Inténtalo nuevamente.", "error");
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = "Confirmar Reserva";
+      }
+    });
+
+    function showAlert(message, type) {
+      alertMsg.innerText = message;
+      alertMsg.className = `alert alert-${type}`;
+      alertMsg.style.display = 'block';
+
+      setTimeout(() => {
+        alertMsg.style.display = 'none';
+      }, 5000);
+    }
+  </script>
+
+</body>
+</html>
